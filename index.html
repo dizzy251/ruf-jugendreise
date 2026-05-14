@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Jugendreise – Italien, Tarquinia</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sun: #FF6B2B;
+    --sky: #0A9BDB;
+    --green: #2ECC71;
+    --red: #E74C3C;
+    --dark: #1A1A2E;
+    --muted: #8395A7;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  /* ── Header ── */
+  .header {
+    width: 100%;
+    background: linear-gradient(135deg, #FF6B2B 0%, #FF9F43 50%, #F9CA24 100%);
+    padding: 0 0 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 32px;
+    background: var(--dark);
+    border-radius: 32px 32px 0 0;
+  }
+  .header-inner {
+    padding: 24px 20px 0;
+    position: relative;
+    z-index: 1;
+  }
+  .brand {
+    font-family: 'Pacifico', cursive;
+    font-size: 15px;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+  }
+  .brand span { color: #fff; }
+  .destination-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.22);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+  .poll-title {
+    font-size: 26px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.15;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    margin-bottom: 6px;
+  }
+  .poll-subtitle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.82);
+    font-weight: 600;
+  }
+  .wave-deco {
+    position: absolute;
+    right: -10px; top: 10px;
+    font-size: 72px;
+    opacity: 0.18;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  /* ── Main ── */
+  .main {
+    width: 100%;
+    max-width: 440px;
+    padding: 20px 16px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* ── Vote card ── */
+  .vote-card {
+    background: #1E2A3A;
+    border-radius: 20px;
+    padding: 22px 18px;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .vote-card h2 {
+    font-size: 15px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .vote-card p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+
+  .input-group { margin-bottom: 14px; }
+  .input-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 7px;
+  }
+  .input-group input {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 13px 15px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-group input::placeholder { color: rgba(255,255,255,0.28); }
+  .input-group input:focus { border-color: var(--sky); }
+
+  .btn-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .vote-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 22px 10px;
+    border-radius: 16px;
+    border: 2.5px solid transparent;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.18s ease;
+    background: rgba(255,255,255,0.05);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .vote-btn .emoji { font-size: 40px; line-height: 1; }
+  .vote-btn.yes { border-color: rgba(46,204,113,0.3); }
+  .vote-btn.no  { border-color: rgba(231,76,60,0.3); }
+  .vote-btn.yes:hover, .vote-btn.yes.selected {
+    background: rgba(46,204,113,0.15);
+    border-color: var(--green);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(46,204,113,0.25);
+  }
+  .vote-btn.no:hover, .vote-btn.no.selected {
+    background: rgba(231,76,60,0.15);
+    border-color: var(--red);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(231,76,60,0.25);
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #FF6B2B, #FF9F43);
+    border: none;
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    box-shadow: 0 4px 20px rgba(255,107,43,0.35);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .submit-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(255,107,43,0.45); }
+  .submit-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+  /* ── Success ── */
+  .success-banner {
+    display: none;
+    background: linear-gradient(135deg, #1A3A2A, #1E4D38);
+    border: 1.5px solid rgba(46,204,113,0.4);
+    border-radius: 16px;
+    padding: 22px 18px;
+    text-align: center;
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .success-banner.show { display: block; }
+  .success-banner .icon { font-size: 32px; margin-bottom: 6px; }
+  .success-banner h3 { font-size: 16px; font-weight: 900; color: var(--green); margin-bottom: 4px; }
+  .success-banner p { font-size: 12px; color: rgba(255,255,255,0.6); font-weight: 600; }
+  @keyframes popIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  /* ── Stats ── */
+  .stats-card {
+    background: #1E2A3A;
+    border-radius: 20px;
+    padding: 18px 18px 20px;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .stats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .stats-header h2 { font-size: 14px; font-weight: 800; color: #fff; }
+  .total-badge {
+    background: rgba(255,255,255,0.08);
+    border-radius: 100px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--muted);
+  }
+  .bar-container { margin-bottom: 14px; }
+  .bar-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 12px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.65);
+  }
+  .bar-track {
+    height: 10px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .bar-fill.yes { background: linear-gradient(90deg, #2ECC71, #27AE60); }
+  .bar-fill.no  { background: linear-gradient(90deg, #E74C3C, #C0392B); }
+
+  /* ── Voters ── */
+  .voters-card {
+    background: #1E2A3A;
+    border-radius: 20px;
+    padding: 18px;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .voters-card h2 {
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 14px;
+  }
+  .voter-list { display: flex; flex-direction: column; gap: 8px; }
+  .voter-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn {
+    from { transform: translateX(-12px); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+  }
+  .voter-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 900; flex-shrink: 0;
+  }
+  .voter-avatar.yes { background: rgba(46,204,113,0.2); color: var(--green); }
+  .voter-avatar.no  { background: rgba(231,76,60,0.2);  color: var(--red); }
+  .voter-info { flex: 1; min-width: 0; }
+  .voter-name { font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .voter-time { font-size: 10px; color: var(--muted); font-weight: 600; margin-top: 1px; }
+  .voter-vote { font-size: 20px; flex-shrink: 0; }
+
+  .empty-state {
+    text-align: center;
+    padding: 24px;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .empty-state .icon { font-size: 28px; display: block; margin-bottom: 8px; }
+
+  .error-msg {
+    background: rgba(231,76,60,0.15);
+    border: 1px solid rgba(231,76,60,0.4);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #E74C3C;
+    display: none;
+    margin-top: 8px;
+  }
+  .error-msg.show { display: block; }
+
+  .footer {
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+    font-weight: 700;
+    padding-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">✈️ <span>ruf</span> Jugendreisen – Umfrage</div>
+    <div class="destination-badge">🇮🇹 &nbsp;TARQUINIA · ITALIEN</div>
+    <div class="poll-title">Jugendreise –<br>Italien, Tarquinia</div>
+    <div class="poll-subtitle">Machst du mit? Stimme jetzt ab! 🏖️</div>
+    <div class="wave-deco">🌊</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="vote-card" id="voteCard">
+    <h2>Deine Stimme</h2>
+    <p>Gib deinen Namen ein und wähle aus.</p>
+
+    <div class="input-group">
+      <label>Dein Name</label>
+      <input type="text" id="nameInput" placeholder="z. B. Max Mustermann" maxlength="40" autocomplete="off" autocorrect="off" autocapitalize="words">
+    </div>
+
+    <div class="btn-row">
+      <button class="vote-btn yes" id="btnYes" onclick="selectVote('yes')">
+        <span class="emoji">✅</span>
+      </button>
+      <button class="vote-btn no" id="btnNo" onclick="selectVote('no')">
+        <span class="emoji">❌</span>
+      </button>
+    </div>
+
+    <div class="error-msg" id="errorMsg">⚠️ Dieser Name hat bereits abgestimmt!</div>
+
+    <button class="submit-btn" id="submitBtn" onclick="submitVote()" disabled>
+      Abstimmen ✈️
+    </button>
+  </div>
+
+  <div class="success-banner" id="successBanner">
+    <div class="icon">🎉</div>
+    <h3>Deine Stimme wurde gezählt!</h3>
+    <p>Danke fürs Mitmachen.<br>Du kannst die Ergebnisse unten sehen.</p>
+  </div>
+
+  <div class="stats-card">
+    <div class="stats-header">
+      <h2>📊 Ergebnisse</h2>
+      <span class="total-badge" id="totalBadge">0 Stimmen</span>
+    </div>
+    <div class="bar-container">
+      <div class="bar-label">
+        <span>✅ Dabei</span>
+        <span id="yesCount">0 (0%)</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill yes" id="yesBar" style="width:0%"></div></div>
+    </div>
+    <div class="bar-container" style="margin-bottom:0">
+      <div class="bar-label">
+        <span>❌ Nicht dabei</span>
+        <span id="noCount">0 (0%)</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill no" id="noBar" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <div class="voters-card">
+    <h2>👥 Wer hat schon abgestimmt?</h2>
+    <div class="voter-list" id="voterList"></div>
+  </div>
+
+  <div class="footer">Jugendreise Umfrage · Tarquinia 🇮🇹</div>
+</div>
+
+<script>
+  const STORAGE_KEY = 'jugendreise_tarquinia_v1';
+  let selectedVote = null;
+  let votes = [];
+
+  function loadVotes() {
+    try { votes = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch(e) { votes = []; }
+  }
+  function saveVotes() { localStorage.setItem(STORAGE_KEY, JSON.stringify(votes)); }
+
+  function selectVote(v) {
+    selectedVote = v;
+    document.getElementById('btnYes').classList.toggle('selected', v === 'yes');
+    document.getElementById('btnNo').classList.toggle('selected', v === 'no');
+    document.getElementById('errorMsg').classList.remove('show');
+    checkReady();
+  }
+  function checkReady() {
+    const name = document.getElementById('nameInput').value.trim();
+    document.getElementById('submitBtn').disabled = !(selectedVote && name.length >= 2);
+  }
+  document.getElementById('nameInput').addEventListener('input', () => {
+    document.getElementById('errorMsg').classList.remove('show');
+    checkReady();
+  });
+
+  function formatTime(ts) {
+    const d = new Date(ts);
+    return d.toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'2-digit' }) +
+           ' · ' + d.toLocaleTimeString('de-DE', { hour:'2-digit', minute:'2-digit' });
+  }
+  function getInitials(name) {
+    return name.trim().split(/\s+/).map(w => w[0]||'').join('').toUpperCase().slice(0,2) || '??';
+  }
+  function esc(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function renderVoters() {
+    const list = document.getElementById('voterList');
+    if (!votes.length) {
+      list.innerHTML = `<div class="empty-state"><span class="icon">🏖️</span>Noch keine Stimmen – sei der Erste!</div>`;
+      return;
+    }
+    list.innerHTML = [...votes].reverse().map(v => `
+      <div class="voter-item">
+        <div class="voter-avatar ${v.vote}">${esc(getInitials(v.name))}</div>
+        <div class="voter-info">
+          <div class="voter-name">${esc(v.name)}</div>
+          <div class="voter-time">${formatTime(v.ts)}</div>
+        </div>
+        <div class="voter-vote">${v.vote === 'yes' ? '✅' : '❌'}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderStats() {
+    const total = votes.length;
+    const yesN  = votes.filter(v => v.vote === 'yes').length;
+    const noN   = votes.filter(v => v.vote === 'no').length;
+    const yesPct = total ? Math.round(yesN / total * 100) : 0;
+    const noPct  = total ? Math.round(noN  / total * 100) : 0;
+    document.getElementById('totalBadge').textContent = total + (total === 1 ? ' Stimme' : ' Stimmen');
+    document.getElementById('yesCount').textContent = `${yesN} (${yesPct}%)`;
+    document.getElementById('noCount').textContent  = `${noN} (${noPct}%)`;
+    document.getElementById('yesBar').style.width = yesPct + '%';
+    document.getElementById('noBar').style.width  = noPct + '%';
+  }
+
+  function submitVote() {
+    const name = document.getElementById('nameInput').value.trim();
+    if (!name || !selectedVote) return;
+    if (votes.some(v => v.name.toLowerCase() === name.toLowerCase())) {
+      document.getElementById('errorMsg').classList.add('show'); return;
+    }
+    votes.push({ name, vote: selectedVote, ts: Date.now() });
+    saveVotes();
+    document.getElementById('voteCard').style.display = 'none';
+    document.getElementById('successBanner').classList.add('show');
+    renderStats();
+    renderVoters();
+  }
+
+  loadVotes(); renderStats(); renderVoters();
+</script>
+</body>
+</html>
